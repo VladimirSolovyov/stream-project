@@ -1,7 +1,6 @@
-import React from 'react'
 import StreamTable from '../components/StreamTable'
 
-const StreamListPage: React.FC = () => {
+const StreamListPage = () => {
 	return (
 		<div>
 			<h1>Список Stream </h1>

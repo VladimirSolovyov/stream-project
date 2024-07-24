@@ -1,7 +1,6 @@
-import React from 'react'
 import StreamForm from '../components/StreamForm'
 
-const CreateStreamPage: React.FC = () => {
+const CreateStreamPage = () => {
 	return (
 		<div className='createStream'>
 			<h1>Добавление Stream</h1>

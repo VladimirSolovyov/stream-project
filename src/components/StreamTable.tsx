@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { fetchStreams } from '../api/streams'
 import {
 	Table,
@@ -24,7 +24,7 @@ interface Stream {
 	stats: StreamStats
 }
 
-const StreamTable: React.FC = () => {
+const StreamTable = () => {
 	const [streams, setStreams] = useState<Stream[]>([])
 	const [page, setPage] = useState(1)
 	const [next, setNext] = useState(0)
@@ -32,11 +32,14 @@ const StreamTable: React.FC = () => {
 
 	useEffect(() => {
 		const loadStreams = async () => {
-			console.log('loadStream call')
-			const data = await fetchStreams(page)
-			setNext(() => (data.next ? parseInt(data.next) : -1))
-			setPrev(parseInt(data.prev))
-			setStreams(data.streams)
+			try {
+				const data = await fetchStreams(page)
+				setNext(() => (data.next ? parseInt(data.next) : -1))
+				setPrev(parseInt(data.prev))
+				setStreams(data.streams)
+			} catch (error) {
+				console.error(error)
+			}
 		}
 
 		loadStreams()
@@ -45,6 +48,14 @@ const StreamTable: React.FC = () => {
 
 		return () => clearInterval(intervalId)
 	}, [page])
+
+	const handlePreviousClick = useCallback(() => {
+		setPage(prev)
+	}, [prev])
+
+	const handleNextClick = useCallback(() => {
+		setPage(next)
+	}, [next])
 
 	return (
 		<Box sx={{ display: 'flex', flexDirection: 'column', height: '80vh' }}>
@@ -73,10 +84,10 @@ const StreamTable: React.FC = () => {
 				</Table>
 			</TableContainer>
 			<Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
-				<Button onClick={() => setPage(prev)} disabled={page === 1}>
+				<Button onClick={handlePreviousClick} disabled={page === 1}>
 					Previous
 				</Button>
-				<Button onClick={() => setPage(next)} disabled={next === -1}>
+				<Button onClick={handleNextClick} disabled={next === -1}>
 					Next
 				</Button>
 			</Box>

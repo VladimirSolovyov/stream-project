@@ -8,12 +8,23 @@ interface Stream {
 }
 
 export const fetchStreams = async (cursor: number) => {
-	const response = await axios.get(`${API_BASE_URL}?cursor=${cursor}&limit=100`) //TODO не сработал select=name,inputs,stats,dvr.root
-	return response.data
+	try {
+		const response = await axios.get(
+			`${API_BASE_URL}?cursor=${cursor}&limit=100`
+		) //TODO не сработал select=name,inputs,stats,dvr.root
+		return response.data
+	} catch (error) {
+		console.error(error)
+		throw error
+	}
 }
 
 export const saveStream = async (stream: Stream) => {
-	debugger
-	const response = await axios.put(`${API_BASE_URL}${stream.name}`, stream)
-	return response.data
+	try {
+		const response = await axios.put(`${API_BASE_URL}${stream.name}`, stream)
+		return response.data
+	} catch (error) {
+		console.error(error)
+		throw error
+	}
 }

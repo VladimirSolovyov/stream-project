@@ -1,4 +1,3 @@
-import React from 'react'
 import { AppBar, Toolbar, Button, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { styled } from '@mui/system'
@@ -13,7 +12,7 @@ const Logo = styled('img')({
 	height: '100px',
 })
 
-const MenuAppBar: React.FC = () => {
+const MenuAppBar = () => {
 	return (
 		<AppBar position='static'>
 			<Toolbar>

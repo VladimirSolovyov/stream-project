@@ -1,17 +1,35 @@
-import React, { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { saveStream } from '../api/streams'
 import { useNavigate } from 'react-router-dom'
 import { TextField, Button, Box } from '@mui/material'
 
-const StreamForm: React.FC = () => {
+const StreamForm = () => {
 	const [name, setName] = useState('')
 	const [sourceUrl, setSourceUrl] = useState('')
 	const navigate = useNavigate()
 
+	const handleNameChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			setName(e.target.value)
+		},
+		[]
+	)
+
+	const handleSourceUrlChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			setSourceUrl(e.target.value)
+		},
+		[]
+	)
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		await saveStream({ name, inputs: [sourceUrl] })
-		navigate('/')
+		try {
+			await saveStream({ name, inputs: [sourceUrl] })
+			navigate('/')
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	return (
@@ -19,7 +37,7 @@ const StreamForm: React.FC = () => {
 			<TextField
 				label='Stream Name'
 				value={name}
-				onChange={e => setName(e.target.value)}
+				onChange={handleNameChange}
 				fullWidth
 				margin='normal'
 				required
@@ -27,7 +45,7 @@ const StreamForm: React.FC = () => {
 			<TextField
 				label='Source URL'
 				value={sourceUrl}
-				onChange={e => setSourceUrl(e.target.value)}
+				onChange={handleSourceUrlChange}
 				fullWidth
 				margin='normal'
 				required
